@@ -2,6 +2,8 @@
 
 一个使用 [oxc-ark](https://github.com/ohos-rs/oxc-ark) 格式化 ArkTS `.ets` 文件的 VSCode 插件。
 
+[在 VSCode 扩展市场中查看&安装 >>](https://marketplace.visualstudio.com/items?itemName=baoshuo.arkts-formatter)
+
 ## 使用
 
 打开 `.ets` 文件后运行「格式化文档」，或在工作区设置中启用保存时格式化：
