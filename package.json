@@ -7,6 +7,9 @@
   "license": "MIT",
   "icon": "images/icon.png",
   "author": "Baoshuo <i@baoshuo.ren>",
+  "sponsor": {
+    "url": "https://github.com/sponsors/renbaoshuo"
+  },
   "private": true,
   "repository": {
     "type": "git",
