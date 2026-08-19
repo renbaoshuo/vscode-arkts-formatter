@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Support VS Code for the Web through the upstream `oxk` WASI build.
+
 ## 0.1.0
 
 - Initial release.

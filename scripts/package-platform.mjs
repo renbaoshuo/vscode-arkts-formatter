@@ -17,6 +17,7 @@ const targetBindings = {
   'alpine-x64': '@ohos-rs/oxk-linux-x64-musl',
   'win32-arm64': '@ohos-rs/oxk-win32-arm64-msvc',
   'win32-x64': '@ohos-rs/oxk-win32-x64-msvc',
+  web: '@ohos-rs/oxk-wasm32-wasi',
 };
 
 function isMusl() {
@@ -53,7 +54,7 @@ function detectTarget() {
   throw new Error(`Unsupported packaging platform: ${process.platform}-${process.arch}`);
 }
 
-async function verifyFormatter(bindingPackage) {
+async function verifyNativeFormatter(bindingPackage) {
   const packagePath = join(root, 'node_modules', ...bindingPackage.split('/'), 'package.json');
   if (!existsSync(packagePath)) {
     throw new Error(`Missing ${bindingPackage}. Run yarn install on the target platform before packaging.`);
@@ -69,8 +70,8 @@ async function verifyFormatter(bindingPackage) {
 }
 
 const detectedTarget = detectTarget();
-const requestedTarget = process.env.VSCE_TARGET || detectedTarget;
-if (requestedTarget !== detectedTarget) {
+const requestedTarget = process.argv[2] || process.env.VSCE_TARGET || detectedTarget;
+if (requestedTarget !== 'web' && requestedTarget !== detectedTarget) {
   throw new Error(
     `VSCE_TARGET=${requestedTarget} does not match the current runtime (${detectedTarget}). ` +
       'Build native VSIX packages on matching runners.',
@@ -82,7 +83,17 @@ if (!bindingPackage) {
   throw new Error(`No oxc-ark binding mapping for VS Code target ${requestedTarget}`);
 }
 
-await verifyFormatter(bindingPackage);
+if (requestedTarget === 'web') {
+  const wasmPath = join(root, 'node_modules', ...bindingPackage.split('/'), 'oxk.wasm32-wasi.wasm');
+  if (!existsSync(wasmPath)) {
+    throw new Error(
+      `Missing ${bindingPackage}. Run yarn install --frozen-lockfile --ignore-platform --force before packaging web.`,
+    );
+  }
+  await WebAssembly.compile(readFileSync(wasmPath));
+} else {
+  await verifyNativeFormatter(bindingPackage);
+}
 
 const manifest = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 const outputDirectory = join(root, 'dist');
@@ -94,14 +105,16 @@ if (!existsSync(vsceEntry)) {
   throw new Error('Cannot find @vscode/vsce. Run `yarn install` first.');
 }
 
-const result = spawnSync(
-  process.execPath,
-  [vsceEntry, 'package', '--yarn', '--target', requestedTarget, '--out', outputPath],
-  {
-    cwd: root,
-    stdio: 'inherit',
-  },
-);
+const vsceArguments = [vsceEntry, 'package', '--yarn', '--target', requestedTarget, '--out', outputPath];
+if (requestedTarget === 'web') {
+  vsceArguments.push('--ignoreFile', join(root, '.vscodeignore.web'), '--no-dependencies');
+}
+
+const result = spawnSync(process.execPath, vsceArguments, {
+  cwd: root,
+  env: { ...process.env, VSCE_TARGET: requestedTarget },
+  stdio: 'inherit',
+});
 
 if (result.error) {
   throw result.error;
