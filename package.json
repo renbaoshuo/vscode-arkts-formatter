@@ -1,0 +1,185 @@
+{
+  "name": "arkts-formatter",
+  "displayName": "ArkTS Formatter",
+  "description": "ArkTS 代码格式化工具，支持使用自定义 .oxfmtrc 配置文件配置格式化风格",
+  "version": "0.1.0",
+  "publisher": "baoshuo",
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "author": "Baoshuo <i@baoshuo.ren>",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/renbaoshuo/vscode-arkts-formatter.git"
+  },
+  "engines": {
+    "vscode": "^1.106.0"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "keywords": [
+    "arkts",
+    "ets",
+    "openharmony",
+    "harmonyos",
+    "formatter",
+    "oxc",
+    "ohos",
+    "huawei",
+    "harmony"
+  ],
+  "activationEvents": [
+    "onLanguage:arkts",
+    "onLanguage:ets"
+  ],
+  "main": "./out/src/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "arkts",
+        "aliases": [
+          "ArkTS",
+          "ETS"
+        ],
+        "extensions": [
+          ".ets"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "configuration": {
+      "title": "ArkTS Formatter",
+      "properties": {
+        "arktsFormatter.config": {
+          "type": "object",
+          "default": {},
+          "scope": "resource",
+          "markdownDescription": "传给 `oxc-ark` 的格式化配置。工作区中最近的 `.oxfmtrc.json` 或 `.oxfmtrc.jsonc` 会覆盖这里的同名配置。",
+          "properties": {
+            "useTabs": {
+              "type": "boolean",
+              "description": "Use tabs instead of spaces for indentation."
+            },
+            "tabWidth": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 16,
+              "description": "Number of spaces per indentation level."
+            },
+            "endOfLine": {
+              "type": "string",
+              "enum": [
+                "lf",
+                "crlf",
+                "cr"
+              ],
+              "description": "Line ending style."
+            },
+            "printWidth": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 320,
+              "description": "Preferred line width."
+            },
+            "singleQuote": {
+              "type": "boolean",
+              "description": "Prefer single quotes."
+            },
+            "jsxSingleQuote": {
+              "type": "boolean",
+              "description": "Prefer single quotes in JSX-like attributes."
+            },
+            "quoteProps": {
+              "type": "string",
+              "enum": [
+                "as-needed",
+                "consistent",
+                "preserve"
+              ],
+              "description": "Object property quote behavior."
+            },
+            "trailingComma": {
+              "type": "string",
+              "enum": [
+                "all",
+                "es5",
+                "none"
+              ],
+              "description": "Trailing comma behavior."
+            },
+            "semi": {
+              "type": "boolean",
+              "description": "Print semicolons."
+            },
+            "arrowParens": {
+              "type": "string",
+              "enum": [
+                "always",
+                "avoid"
+              ],
+              "description": "Parentheses around a sole arrow-function parameter."
+            },
+            "bracketSpacing": {
+              "type": "boolean",
+              "description": "Print spaces between brackets in object literals."
+            },
+            "bracketSameLine": {
+              "type": "boolean",
+              "description": "Put the closing bracket on the same line as the last attribute."
+            },
+            "objectWrap": {
+              "type": "string",
+              "enum": [
+                "preserve",
+                "collapse"
+              ],
+              "description": "Preserve or collapse existing object wrapping."
+            },
+            "singleAttributePerLine": {
+              "type": "boolean",
+              "description": "Use one attribute per line in multiline markup."
+            },
+            "embeddedLanguageFormatting": {
+              "type": "string",
+              "enum": [
+                "auto",
+                "off"
+              ],
+              "description": "Format supported embedded languages."
+            },
+            "insertFinalNewline": {
+              "type": "boolean",
+              "description": "Insert a newline at the end of the file."
+            }
+          },
+          "additionalProperties": true
+        },
+        "arktsFormatter.configPath": {
+          "type": "string",
+          "default": "",
+          "scope": "resource",
+          "markdownDescription": "可选的 `.oxfmtrc` 路径。相对路径以当前工作区文件夹为基准；留空时从当前 `.ets` 文件向工作区根目录查找。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "compile": "tsc -p .",
+    "watch": "tsc -watch -p .",
+    "test": "yarn run compile && node --test out/test/*.test.js",
+    "package": "node scripts/package-platform.mjs"
+  },
+  "dependencies": {
+    "@ohos-rs/oxk": "0.9.0",
+    "jsonc-parser": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/vscode": "^1.106.0",
+    "@vscode/vsce": "^3.6.0",
+    "typescript": "^5.9.2"
+  },
+  "packageManager": "yarn@1.22.22"
+}

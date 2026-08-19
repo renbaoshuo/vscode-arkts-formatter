@@ -1,0 +1,13 @@
+.git/**
+.github/**
+.vscode/**
+src/**
+test/**
+scripts/**
+out/test/**
+out/**/*.map
+dist/**
+.gitignore
+tsconfig.json
+*.vsix
+yarn-error.log
