@@ -1,6 +1,6 @@
 # ArkTS Formatter
 
-一个使用 [oxc-ark](https://github.com/ohos-rs/oxc-ark) 格式化 ArkTS `.ets` 文件的 VSCode 插件。
+一个使用 [oxc-ark](https://github.com/ohos-rs/oxc-ark) 格式化 ArkTS `.ets` 文件的 VSCode 插件。同时支持桌面版 VS Code 和 VS Code for the Web。
 
 [在 VSCode 扩展市场中查看&安装 >>](https://marketplace.visualstudio.com/items?itemName=baoshuo.arkts-formatter)
 
@@ -26,6 +26,13 @@ yarn test
 ```
 
 在 VS Code 中按 `F5` 启动 Extension Development Host，即可调试插件。
+
+构建 WebAssembly 版本需要安装上游的 WASI 可选依赖：
+
+```bash
+yarn install --frozen-lockfile --ignore-platform --force
+yarn package:web
+```
 
 ### 使用 `.oxfmtrc`
 

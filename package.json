@@ -2,7 +2,7 @@
   "name": "arkts-formatter",
   "displayName": "ArkTS Formatter",
   "description": "ArkTS 代码格式化工具，支持使用自定义 .oxfmtrc 配置文件配置格式化风格",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "baoshuo",
   "license": "MIT",
   "icon": "images/icon.png",
@@ -37,6 +37,7 @@
     "onLanguage:ets"
   ],
   "main": "./out/src/extension.js",
+  "browser": "./out/web/extension.js",
   "contributes": {
     "languages": [
       {
@@ -168,20 +169,25 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "yarn run compile",
+    "vscode:prepublish": "yarn run compile && node scripts/build-web.mjs",
+    "build:web": "yarn run compile && node scripts/build-web.mjs --web",
     "compile": "tsc -p .",
     "watch": "tsc -watch -p .",
     "test": "yarn run compile && node --test out/test/*.test.js",
-    "package": "node scripts/package-platform.mjs"
+    "package": "node scripts/package-platform.mjs",
+    "package:web": "node scripts/package-platform.mjs web"
   },
   "dependencies": {
     "@ohos-rs/oxk": "0.9.0",
     "jsonc-parser": "^3.3.1"
   },
   "devDependencies": {
+    "@emnapi/core": "^1.7.1",
+    "@emnapi/runtime": "^1.7.1",
     "@types/node": "^24.3.0",
     "@types/vscode": "^1.106.0",
     "@vscode/vsce": "^3.6.0",
+    "esbuild": "^0.25.11",
     "typescript": "^5.9.2"
   },
   "packageManager": "yarn@1.22.22"

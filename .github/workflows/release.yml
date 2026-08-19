@@ -30,6 +30,8 @@ jobs:
             runner: windows-11-arm
           - target: win32-x64
             runner: windows-2025
+          - target: web
+            runner: ubuntu-24.04
 
     runs-on: ${{ matrix.runner }}
     steps:
@@ -46,7 +48,12 @@ jobs:
           if (process.env.GITHUB_REF_NAME !== expected) {
           console.error('Expected tag ' + expected + ', got ' + process.env.GITHUB_REF_NAME);
           process.exit(1); }"
-      - run: yarn install --frozen-lockfile
+      - name: Install dependencies
+        if: matrix.target != 'web'
+        run: yarn install --frozen-lockfile
+      - name: Install dependencies for WebAssembly
+        if: matrix.target == 'web'
+        run: yarn install --frozen-lockfile --ignore-platform --force
       - run: yarn test
       - run: yarn package
         env:

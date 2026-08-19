@@ -1,4 +1,3 @@
-import * as path from 'node:path';
 import * as vscode from 'vscode';
 import {
   FormatterOptions,
@@ -24,7 +23,15 @@ async function isFile(uri: vscode.Uri): Promise<boolean> {
 }
 
 function documentDirectory(uri: vscode.Uri): vscode.Uri {
-  return uri.with({ path: path.posix.dirname(uri.path), query: '', fragment: '' });
+  return vscode.Uri.joinPath(uri.with({ query: '', fragment: '' }), '..');
+}
+
+function normalizedUriPath(uri: vscode.Uri): string {
+  return vscode.Uri.joinPath(uri.with({ query: '', fragment: '' }), '.').path;
+}
+
+function isAbsoluteFilePath(value: string): boolean {
+  return value.startsWith('/') || /^[a-zA-Z]:[\\/]/.test(value) || value.startsWith('\\\\');
 }
 
 function resolveExplicitConfig(
@@ -32,7 +39,7 @@ function resolveExplicitConfig(
   document: vscode.TextDocument,
   folder: vscode.WorkspaceFolder | undefined,
 ): vscode.Uri {
-  if (path.isAbsolute(configuredPath) && document.uri.scheme === 'file') {
+  if (isAbsoluteFilePath(configuredPath) && document.uri.scheme === 'file') {
     return vscode.Uri.file(configuredPath);
   }
 
@@ -48,24 +55,23 @@ async function findNearestConfig(
     return undefined;
   }
 
-  const boundary = path.posix.normalize(folder.uri.path);
-  let current = path.posix.normalize(documentDirectory(document.uri).path);
+  const boundary = normalizedUriPath(folder.uri);
+  let current = documentDirectory(document.uri);
 
-  while (current === boundary || current.startsWith(`${boundary}/`)) {
-    const directory = folder.uri.with({ path: current, query: '', fragment: '' });
+  while (current.path === boundary || current.path.startsWith(`${boundary}/`)) {
     for (const name of CONFIG_NAMES) {
-      const candidate = vscode.Uri.joinPath(directory, name);
+      const candidate = vscode.Uri.joinPath(current, name);
       if (await isFile(candidate)) {
         return candidate;
       }
     }
 
-    if (current === boundary) {
+    if (current.path === boundary) {
       break;
     }
 
-    const parent = path.posix.dirname(current);
-    if (parent === current) {
+    const parent = vscode.Uri.joinPath(current, '..');
+    if (parent.path === current.path) {
       break;
     }
     current = parent;
