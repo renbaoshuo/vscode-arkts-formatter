@@ -2,7 +2,7 @@
   "name": "arkts-formatter",
   "displayName": "ArkTS Formatter",
   "description": "ArkTS 代码格式化工具，支持使用自定义 .oxfmtrc 配置文件配置格式化风格",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "baoshuo",
   "license": "MIT",
   "icon": "images/icon.png",
