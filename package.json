@@ -186,8 +186,9 @@
     "@emnapi/runtime": "^1.7.1",
     "@types/node": "^24.3.0",
     "@types/vscode": "^1.106.0",
-    "@vscode/vsce": "^3.6.0",
+    "@vscode/vsce": "^4.1.1",
     "esbuild": "^0.25.11",
+    "ovsx": "^1.4.0",
     "typescript": "^5.9.2"
   },
   "packageManager": "yarn@1.22.22"
