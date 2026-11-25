@@ -1,12 +1,14 @@
 # ArkTS Formatter
 
-一个使用 [oxc-ark](https://github.com/ohos-rs/oxc-ark) 格式化 ArkTS `.ets` 文件的 VSCode 插件。同时支持桌面版 VS Code 和 VS Code for the Web。支持 ArkTS 1.1 和 1.2 (Static ETS) 语法。
+基于 [oxc-ark](https://github.com/ohos-rs/oxc-ark) 的 ArkTS（`.ets`）代码格式化插件，支持桌面版 VS Code 与 VS Code for the Web，兼容 ArkTS 1.1 与 ArkTS 1.2（Static ETS）语法。
 
-[在 VSCode 扩展市场中查看&安装 >>](https://marketplace.visualstudio.com/items?itemName=baoshuo.arkts-formatter)<br />[在 Open VSX 中查看&安装 >>](https://open-vsx.org/extension/baoshuo/arkts-formatter)
+[在 VS Code 扩展市场中安装 >>](https://marketplace.visualstudio.com/items?itemName=baoshuo.arkts-formatter)<br />[在 Open VSX 中安装 >>](https://open-vsx.org/extension/baoshuo/arkts-formatter)
 
-## 使用
+## 快速开始
 
-打开 `.ets` 文件后运行「格式化文档」，或在工作区设置中启用保存时格式化：
+打开 `.ets` 文件后，在编辑器右键菜单中选择「格式化文档」（或使用对应快捷键）即可完成格式化。
+
+如需设为默认格式化工具并开启保存时自动格式化，可在工作区 `settings.json` 中添加：
 
 ```jsonc
 {
@@ -17,26 +19,13 @@
 }
 ```
 
-## 开发
+## 格式化配置
 
-```bash
-yarn install
-yarn compile
-yarn test
-```
+插件支持通过工作区配置文件或 VS Code 设置自定义格式化风格，支持 JSONC 注释与尾逗号，修改配置后会在下一次格式化时立即生效。
 
-在 VS Code 中按 `F5` 启动 Extension Development Host，即可调试插件。
+### 使用 `.oxfmtrc` 配置文件
 
-构建 WebAssembly 版本需要安装上游的 WASI 可选依赖：
-
-```bash
-yarn install --frozen-lockfile --ignore-platform --force
-yarn package:web
-```
-
-### 使用 `.oxfmtrc`
-
-插件从当前 `.ets` 文件所在目录开始，向上查找到当前 workspace folder 根目录，读取最近的 `.oxfmtrc.json` 或 `.oxfmtrc.jsonc`。同一目录同时存在两种文件时，`.oxfmtrc.json` 优先。
+插件会从当前 `.ets` 文件所在目录开始，向上查找到当前工作区根目录，并读取最近的 `.oxfmtrc.json` 或 `.oxfmtrc.jsonc`（同一目录下同时存在时，`.oxfmtrc.json` 优先）：
 
 ```jsonc
 // .oxfmtrc.jsonc
@@ -49,11 +38,11 @@ yarn package:web
 }
 ```
 
-也可以通过 `arktsFormatter.configPath` 指定配置文件。相对路径以当前 workspace folder 为基准。
+如果配置文件不在上述默认查找路径中，可以通过 `arktsFormatter.configPath` 手动指定路径（相对路径以当前工作区根目录为基准）。
 
-### 使用 VS Code settings
+### 使用 VS Code 设置
 
-没有配置文件时，可以把 oxfmt 兼容选项写到 `arktsFormatter.config`：
+如果没有使用 `.oxfmtrc` 配置文件，也可以直接在 VS Code 设置中通过 `arktsFormatter.config` 配置 `oxfmt` 兼容选项：
 
 ```jsonc
 {
@@ -65,21 +54,17 @@ yarn package:web
 }
 ```
 
-VS Code settings 是基础配置；如果找到了 `.oxfmtrc.json/.jsonc`，配置文件中的同名字段优先，settings 中未被覆盖的字段仍然生效。插件支持 JSONC 注释和尾逗号，修改配置文件后下一次格式化立即生效。
+### 配置优先级
 
-## 配置优先级
-
-从低到高为：
+配置项按以下顺序从低到高合并，高优先级配置会覆盖低优先级的同名字段，未覆盖的字段保持生效：
 
 1. `oxc-ark` 默认值
-2. `arktsFormatter.config`
-3. 最近的 `.oxfmtrc.json/.oxfmtrc.jsonc`，或 `arktsFormatter.configPath` 指定的文件
+2. VS Code 设置（`arktsFormatter.config`）
+3. 工作区中最近的 `.oxfmtrc.json` / `.oxfmtrc.jsonc`，或 `arktsFormatter.configPath` 指定的文件
 
-### ArkTS 1.2 (Static ETS) 支持
+### ArkTS 1.2（Static ETS）支持
 
-默认情况下，插件按 ArkTS 1.1 的语法格式解析 `.ets` 文件。
-
-如果您的项目使用 ArkTS 1.2 (Static ETS) 语法，需要在 `arktsFormatter.config` 中显式指定 `"lang": "ets-static"`：
+插件默认按 ArkTS 1.1 语法解析 `.ets` 文件。如果项目使用 ArkTS 1.2（Static ETS），请在 `arktsFormatter.config` 中显式设置 `"lang": "ets-static"`：
 
 ```jsonc
 {
@@ -87,6 +72,25 @@ VS Code settings 是基础配置；如果找到了 `.oxfmtrc.json/.jsonc`，配�
     "lang": "ets-static"
   }
 }
+```
+
+## 本地开发
+
+安装依赖、编译并运行单元测试：
+
+```bash
+yarn install
+yarn compile
+yarn test
+```
+
+在 VS Code 中按 `F5` 启动 Extension Development Host 即可调试插件。
+
+如需构建 VS Code for the Web 版本，需要先安装上游的 WASI 可选依赖再打包：
+
+```bash
+yarn install --frozen-lockfile --ignore-platform --force
+yarn package:web
 ```
 
 ## Author
