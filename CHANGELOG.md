@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Trusted Publisher support for VSCode Marketplace and Open VSX.
+- Bump dependency versions.
+
 ## 0.1.1
 
 - Support VS Code for the Web through the upstream `oxk` WASI build.
