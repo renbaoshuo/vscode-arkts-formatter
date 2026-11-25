@@ -11,3 +11,12 @@ test('formats an ArkTS file with oxc-ark options', async () => {
   assert.deepEqual(result.errors, []);
   assert.match(result.code, /const message = 'hello'/);
 });
+
+test('formats an ArkTS 1.2 (Static ETS) file when lang is ets-static', async () => {
+  const result = await format('Static.ets', 'final class Demo { final run(): void {} }\n', {
+    lang: 'ets-static',
+  });
+
+  assert.deepEqual(result.errors, []);
+  assert.equal(result.code, 'final class Demo {\n  final run(): void {}\n}\n');
+});

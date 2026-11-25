@@ -155,6 +155,13 @@
             "insertFinalNewline": {
               "type": "boolean",
               "description": "Insert a newline at the end of the file."
+            },
+            "lang": {
+              "type": "string",
+              "enum": [
+                "ets-static"
+              ],
+              "description": "Explicit parser mode for .ets files (use 'ets-static' for ArkTS 1.2 / Static ETS; omit for ArkTS 1.1)."
             }
           },
           "additionalProperties": true
@@ -178,7 +185,7 @@
     "package:web": "node scripts/package-platform.mjs web"
   },
   "dependencies": {
-    "@ohos-rs/oxk": "0.9.0",
+    "@ohos-rs/oxk": "0.10.0",
     "jsonc-parser": "^3.3.1"
   },
   "devDependencies": {

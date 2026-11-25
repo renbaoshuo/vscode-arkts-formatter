@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Upgrade `@ohos-rs/oxk` to `0.10.0`.
+- Support ArkTS 1.2 (Static ETS) via the `lang: "ets-static"` option.
+
 ## 0.1.2
 
 - Trusted Publisher support for VSCode Marketplace and Open VSX.

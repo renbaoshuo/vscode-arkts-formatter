@@ -1,8 +1,8 @@
 # ArkTS Formatter
 
-一个使用 [oxc-ark](https://github.com/ohos-rs/oxc-ark) 格式化 ArkTS `.ets` 文件的 VSCode 插件。同时支持桌面版 VS Code 和 VS Code for the Web。
+一个使用 [oxc-ark](https://github.com/ohos-rs/oxc-ark) 格式化 ArkTS `.ets` 文件的 VSCode 插件。同时支持桌面版 VS Code 和 VS Code for the Web。支持 ArkTS 1.1 和 1.2 (Static ETS) 语法。
 
-[在 VSCode 扩展市场中查看&安装 >>](https://marketplace.visualstudio.com/items?itemName=baoshuo.arkts-formatter)
+[在 VSCode 扩展市场中查看&安装 >>](https://marketplace.visualstudio.com/items?itemName=baoshuo.arkts-formatter)<br />[在 Open VSX 中查看&安装 >>](https://open-vsx.org/extension/baoshuo/arkts-formatter)
 
 ## 使用
 
@@ -75,7 +75,19 @@ VS Code settings 是基础配置；如果找到了 `.oxfmtrc.json/.jsonc`，配�
 2. `arktsFormatter.config`
 3. 最近的 `.oxfmtrc.json/.oxfmtrc.jsonc`，或 `arktsFormatter.configPath` 指定的文件
 
-当前发布版按 ArkTS 1.1 解析 `.ets`。上游仓库已开始加入 Static ETS / ArkTS 1.2 支持，待对应 API 正式发布后再接入该模式。
+### ArkTS 1.2 (Static ETS) 支持
+
+默认情况下，插件按 ArkTS 1.1 的语法格式解析 `.ets` 文件。
+
+如果您的项目使用 ArkTS 1.2 (Static ETS) 语法，需要在 `arktsFormatter.config` 中显式指定 `"lang": "ets-static"`：
+
+```jsonc
+{
+  "arktsFormatter.config": {
+    "lang": "ets-static"
+  }
+}
+```
 
 ## Author
 
