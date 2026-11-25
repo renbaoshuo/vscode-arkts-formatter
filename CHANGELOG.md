@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.3
 
 - Upgrade `@ohos-rs/oxk` to `0.10.0`.
 - Support ArkTS 1.2 (Static ETS) via the `lang: "ets-static"` option.
